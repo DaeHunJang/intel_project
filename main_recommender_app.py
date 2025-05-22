@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 import argparse
 import sys
@@ -16,18 +15,43 @@ from smart_pub.rag_engine.retriever import Retriever
 from smart_pub.recommendation_engine.recommender import Recommender
 from smart_pub.conversation.dialogue_manager import DialogueManager
 from smart_pub.utils.helpers import get_logger
-from smart_pub.config import DATA_DIR, MODEL_DIR, VECTOR_DB_DIR, RESULTS_DIR
+from smart_pub.config import DATA_DIR, MODEL_DIR, VECTOR_DB_DIR, RESULTS_DIR, EMBEDDING_MODEL_ID
 
 logger = get_logger("main")
+
+def check_embedding_model():
+    """Check if embedding model exists locally"""
+    if "/" in EMBEDDING_MODEL_ID:
+        model_name = EMBEDDING_MODEL_ID.split("/")[-1]
+    else:
+        model_name = EMBEDDING_MODEL_ID
+    
+    local_path = Path(MODEL_DIR) / model_name
+    
+    if local_path.exists() and (local_path / "config.json").exists():
+        logger.info(f"Embedding model found: {local_path}")
+        return True
+    else:
+        logger.warning(f"Embedding model not found at {local_path}")
+        logger.info("Run the following command to download:")
+        logger.info("python download_embedding_model.py")
+        return False
 
 def setup_argparse():
     parser = argparse.ArgumentParser(description="Smart Pub CLI")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
     parser.add_argument("--rebuild-vectordb", action="store_true", help="Rebuild vector database")
     parser.add_argument("--model-id", help="Override model ID to use")
+    parser.add_argument("--skip-embedding-check", action="store_true", help="Skip embedding model check")
     return parser.parse_args()
 
 def initialize_app(args):
+    # Check embedding model first
+    if not args.skip_embedding_check:
+        if not check_embedding_model():
+            logger.error("Embedding model not found. Please download it first.")
+            return None
+    
     # Process drinks data
     logger.info("Processing drinks data...")
     drink_processor = DrinkProcessor(DATA_DIR)
@@ -101,7 +125,7 @@ def run_cli_interface(dialogue_manager):
             user_input = input("\033[94m사용자:\033[0m ")
             
             if user_input.lower() in ["exit", "quit", "종료"]:
-                print("\n\033[93m감사합니다. 필요하시면 다시 불러주세요.!\033[0m")
+                print("\n\033[93m감사합니다. 필요하시면 다시 불러주세요!\033[0m")
                 break
             
             if not user_input.strip():

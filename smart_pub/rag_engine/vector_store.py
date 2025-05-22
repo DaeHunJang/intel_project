@@ -4,9 +4,10 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 import pandas as pd
+from pathlib import Path
 
 from ..utils.helpers import get_logger, load_json, save_json
-from ..config import VECTOR_DB_DIR, EMBEDDING_MODEL_ID
+from ..config import VECTOR_DB_DIR, EMBEDDING_MODEL_ID, MODEL_DIR
 
 logger = get_logger(__name__)
 
@@ -21,13 +22,66 @@ class VectorStore:
         self.index_path = os.path.join(vector_db_dir, "faiss_index.bin")
         self.documents_path = os.path.join(vector_db_dir, "documents.json")
     
+    def _get_local_model_path(self, model_id):
+        """Get local model path if available"""
+        if os.path.exists(model_id):
+            # Already a local path
+            return model_id
+        
+        # Extract model name from HF model ID
+        if "/" in model_id:
+            model_name = model_id.split("/")[-1]
+        else:
+            model_name = model_id
+        
+        local_path = Path(MODEL_DIR) / model_name
+        
+        # Check if local model exists
+        if local_path.exists() and (local_path / "config.json").exists():
+            logger.info(f"Using local embedding model: {local_path}")
+            return str(local_path)
+        else:
+            logger.info(f"Local embedding model not found, will download: {model_id}")
+            return model_id
+    
     def load_embedding_model(self) -> bool:
         try:
-            self.embedding_model = SentenceTransformer(self.embedding_model_id)
-            logger.info(f"Loaded embedding model {self.embedding_model_id}")
+            # Try to use local model first
+            model_path = self._get_local_model_path(self.embedding_model_id)
+            
+            # Set cache directory for downloads
+            cache_dir = Path(MODEL_DIR) / "sentence_transformers_cache"
+            cache_dir.mkdir(exist_ok=True)
+            
+            self.embedding_model = SentenceTransformer(
+                model_path, 
+                cache_folder=str(cache_dir)
+            )
+            
+            logger.info(f"Loaded embedding model from {model_path}")
             return True
+            
         except Exception as e:
             logger.error(f"Error loading embedding model: {e}")
+            
+            # Try fallback to original model ID if local path failed
+            if model_path != self.embedding_model_id:
+                try:
+                    logger.info(f"Trying fallback to download: {self.embedding_model_id}")
+                    cache_dir = Path(MODEL_DIR) / "sentence_transformers_cache"
+                    cache_dir.mkdir(exist_ok=True)
+                    
+                    self.embedding_model = SentenceTransformer(
+                        self.embedding_model_id,
+                        cache_folder=str(cache_dir)
+                    )
+                    
+                    logger.info(f"Successfully downloaded and loaded: {self.embedding_model_id}")
+                    return True
+                    
+                except Exception as e2:
+                    logger.error(f"Fallback also failed: {e2}")
+            
             return False
     
     def build_index(self, drinks: List[Dict[str, Any]]) -> bool:
@@ -78,7 +132,8 @@ class VectorStore:
                 })
                 texts.append(instructions_text)
             
-            embeddings = self.embedding_model.encode(texts)
+            logger.info(f"Encoding {len(texts)} texts...")
+            embeddings = self.embedding_model.encode(texts, show_progress_bar=True)
             
             dimension = embeddings.shape[1]
             self.index = faiss.IndexFlatL2(dimension)

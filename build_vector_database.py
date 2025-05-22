@@ -11,9 +11,27 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from smart_pub.data_processing.drink_processor import DrinkProcessor
 from smart_pub.rag_engine.vector_store import VectorStore
 from smart_pub.utils.helpers import get_logger
-from smart_pub.config import DATA_DIR, VECTOR_DB_DIR
+from smart_pub.config import DATA_DIR, VECTOR_DB_DIR, MODEL_DIR, EMBEDDING_MODEL_ID
 
 logger = get_logger("vector_db_builder")
+
+def get_local_embedding_model_path(model_id, model_dir):
+    """Convert Hugging Face model ID to local path"""
+    if "/" in model_id:
+        model_name = model_id.split("/")[-1]
+    else:
+        model_name = model_id
+    
+    local_path = Path(model_dir) / model_name
+    
+    # Check if local model exists
+    if local_path.exists() and (local_path / "config.json").exists():
+        logger.info(f"Found local embedding model: {local_path}")
+        return str(local_path)
+    else:
+        logger.warning(f"Local embedding model not found at {local_path}")
+        logger.info(f"Will use original model ID for download: {model_id}")
+        return model_id
 
 def main():
     # Process drinks data
@@ -27,12 +45,15 @@ def main():
     
     logger.info(f"Processed {len(processed_drinks)} drinks")
     
-    # Initialize vector store
+    # Get local embedding model path
+    embedding_model_path = get_local_embedding_model_path(EMBEDDING_MODEL_ID, MODEL_DIR)
+    
+    # Initialize vector store with local model path
     logger.info("Initializing vector store...")
-    vector_store = VectorStore(VECTOR_DB_DIR)
+    vector_store = VectorStore(VECTOR_DB_DIR, embedding_model_path)
     
     # Load embedding model
-    logger.info("Loading embedding model...")
+    logger.info(f"Loading embedding model from: {embedding_model_path}")
     if not vector_store.load_embedding_model():
         logger.error("Failed to load embedding model")
         return

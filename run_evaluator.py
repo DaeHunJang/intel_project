@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3 
 import os
 import argparse
 import sys
@@ -22,7 +22,7 @@ from smart_pub.config import DATA_DIR, MODEL_DIR, MODEL_ID, MODEL_CANDIDATES, RE
 
 logger = get_logger("evaluator")
 
-def get_local_model_path(model_id, model_dir):
+def get_local_model_path(model_id: str, model_dir: str) -> str | None:
     """Convert Hugging Face model ID to local path"""
     # Extract model name from HF model ID
     if "/" in model_id:
@@ -46,29 +46,29 @@ def get_local_model_path(model_id, model_dir):
                     logger.info(f"  - {item.name}")
         return None
 
-def check_model_files(model_path):
+def check_model_files(model_path: str) -> bool:
     """Check if model has required files"""
-    model_path = Path(model_path)
+    model_path_obj = Path(model_path)
     
     required_files = ["config.json"]
     model_files = ["model.safetensors", "pytorch_model.bin"]
     
     # Check required files
     for req_file in required_files:
-        if not (model_path / req_file).exists():
+        if not (model_path_obj / req_file).exists():
             logger.error(f"Missing required file: {req_file}")
             return False
     
     # Check model weight files
     has_model_file = False
     for model_file in model_files:
-        if (model_path / model_file).exists():
+        if (model_path_obj / model_file).exists():
             has_model_file = True
             logger.info(f"Found model file: {model_file}")
             break
         
         # Check for split model files
-        split_files = list(model_path.glob(f"{model_file.split('.')[0]}-*.{model_file.split('.')[1]}"))
+        split_files = list(model_path_obj.glob(f"{model_file.split('.')[0]}-*.{model_file.split('.')[1]}"))
         if split_files:
             has_model_file = True
             logger.info(f"Found split model files: {[f.name for f in split_files]}")
@@ -81,7 +81,7 @@ def check_model_files(model_path):
     return True
 
 class LLMEvaluator:
-    def __init__(self, model_id=MODEL_ID, model_dir=MODEL_DIR):
+    def __init__(self, model_id: str = MODEL_ID, model_dir: str = MODEL_DIR):
         self.original_model_id = model_id
         self.model_dir = model_dir
         
@@ -98,7 +98,7 @@ class LLMEvaluator:
         self.llm = None
         self.metrics = {}
     
-    def load_model(self):
+    def load_model(self) -> bool:
         logger.info(f"Loading model from {self.model_id}")
         
         # Verify model files if using local path
@@ -121,7 +121,7 @@ class LLMEvaluator:
             logger.error(f"Error loading model {self.original_model_id}: {e}")
             return False
     
-    def unload_model(self):
+    def unload_model(self) -> None:
         if self.llm and self.llm.model:
             self.llm.model = None
             self.llm.tokenizer = None
@@ -130,7 +130,7 @@ class LLMEvaluator:
             torch.cuda.empty_cache()
             logger.info(f"Unloaded model {self.original_model_id} and cleared GPU cache")
     
-    def measure_latency(self, prompt, num_runs=3):
+    def measure_latency(self, prompt: str, num_runs: int = 3) -> float:
         if not self.llm:
             logger.error("Model not loaded. Call load_model() first.")
             return 0
@@ -153,7 +153,7 @@ class LLMEvaluator:
         self.metrics["latency"] = avg_latency
         return avg_latency
     
-    def measure_throughput(self, prompt, num_runs=3):
+    def measure_throughput(self, prompt: str, num_runs: int = 3) -> float:
         if not self.llm:
             logger.error("Model not loaded. Call load_model() first.")
             return 0
@@ -180,7 +180,7 @@ class LLMEvaluator:
         self.metrics["throughput"] = avg_throughput
         return avg_throughput
     
-    def measure_memory(self):
+    def measure_memory(self) -> dict:
         if not self.llm:
             logger.error("Model not loaded. Call load_model() first.")
             return {}
@@ -203,7 +203,7 @@ class LLMEvaluator:
         
         return memory_stats
     
-    def measure_accuracy(self, test_cases):
+    def measure_accuracy(self, test_cases: list) -> float:
         if not self.llm:
             logger.error("Model not loaded. Call load_model() first.")
             return 0
@@ -234,7 +234,7 @@ class LLMEvaluator:
         self.metrics["accuracy"] = accuracy
         return accuracy
     
-    def run_all_metrics(self, test_cases):
+    def run_all_metrics(self, test_cases: list) -> dict:
         # Short prompt for latency and throughput tests
         short_prompt = "오늘 기분이 좋아. 어떤 술이 좋을까?"
         
@@ -243,11 +243,16 @@ class LLMEvaluator:
         self.measure_memory()
         self.measure_accuracy(test_cases)
         
+        # Detect model type and add metadata
+        model_type, base_model = detect_model_type(self.original_model_id)
+        
         self.metrics["model_id"] = self.original_model_id
+        self.metrics["model_type"] = model_type
+        self.metrics["base_model"] = base_model
         
         return self.metrics
 
-def prepare_test_cases():
+def prepare_test_cases() -> list:
     # Simple test cases for emotion analysis and recommendation
     test_cases = [
         {
@@ -274,7 +279,7 @@ def prepare_test_cases():
     
     return test_cases
 
-def list_available_models(model_dir):
+def list_available_models(model_dir: str) -> list:
     """List available local models"""
     model_dir_path = Path(model_dir)
     available_models = []
@@ -289,11 +294,10 @@ def list_available_models(model_dir):
     
     return available_models
 
-def get_target_models():
+def get_target_models() -> list:
     """Get the target models for evaluation from available local models"""
     target_model_names = [
         "HyperCLOVAX-SEED-Text-Instruct-1.5B",
-        "ko-sbert-nli", 
         "HyperCLOVAX-SEED-Text-Instruct-0.5B",
         "ko-gpt-trinity-1.2B-v0.5",
         "polyglot-ko-1.3b",
@@ -303,16 +307,34 @@ def get_target_models():
     available_models = list_available_models(MODEL_DIR)
     logger.info(f"Available local models: {available_models}")
     
-    # Match target models with available models
+    # Match target models with available models (including optimized versions)
     target_models = []
     for target in target_model_names:
+        # Original model
         if target in available_models:
             target_models.append(target)
             logger.info(f"✓ Found target model: {target}")
-        else:
+        
+        # Optimized versions (INT8, INT4 only)
+        for optimization in ["int8", "int4"]:
+            optimized_name = f"{target}-{optimization}"
+            if optimized_name in available_models:
+                target_models.append(optimized_name)
+                logger.info(f"✓ Found optimized model: {optimized_name}")
+        
+        if target not in available_models:
             logger.warning(f"✗ Target model not found: {target}")
     
     return target_models
+
+def detect_model_type(model_name: str) -> tuple[str, str]:
+    """Detect if model is original or optimized"""
+    if model_name.endswith("-int8"):
+        return "int8", model_name[:-5]
+    elif model_name.endswith("-int4"):
+        return "int4", model_name[:-5]
+    else:
+        return "original", model_name
 
 def save_all_results(results, output_file=None):
     """Save all evaluation results to a single comprehensive file"""
@@ -323,20 +345,35 @@ def save_all_results(results, output_file=None):
     # Ensure results directory exists
     output_file.parent.mkdir(parents=True, exist_ok=True)
     
+    # Group results by base model and optimization type
+    grouped_results = {}
+    for result in results:
+        base_model = result.get("base_model", result.get("model_id", "Unknown"))
+        model_type = result.get("model_type", "unknown")
+        
+        if base_model not in grouped_results:
+            grouped_results[base_model] = {}
+        
+        grouped_results[base_model][model_type] = result
+    
     # Prepare comprehensive results
     comprehensive_results = {
         "evaluation_info": {
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             "total_models_evaluated": len(results),
+            "optimization_types_tested": ["original", "int8", "int4"],
             "evaluation_metrics": ["latency", "throughput", "ram_usage_mb", "gpu_allocated_mb", "gpu_reserved_mb", "accuracy"]
         },
         "models": results,
+        "grouped_by_base_model": grouped_results,
         "summary": {}
     }
     
     # Add summary statistics
     if results:
         metrics_summary = {}
+        
+        # Overall statistics
         for metric in ["latency", "throughput", "ram_usage_mb", "gpu_allocated_mb", "accuracy"]:
             values = [r.get(metric, 0) for r in results if metric in r and isinstance(r[metric], (int, float))]
             if values:
@@ -355,7 +392,22 @@ def save_all_results(results, output_file=None):
                 
                 metrics_summary[metric]["best_model"] = results[best_idx]["model_id"]
         
-        comprehensive_results["summary"] = metrics_summary
+        # Optimization comparison
+        optimization_comparison = {}
+        for opt_type in ["original", "int8", "int4"]:
+            opt_results = [r for r in results if r.get("model_type") == opt_type]
+            if opt_results:
+                optimization_comparison[opt_type] = {
+                    "count": len(opt_results),
+                    "avg_latency": sum(r.get("latency", 0) for r in opt_results) / len(opt_results),
+                    "avg_accuracy": sum(r.get("accuracy", 0) for r in opt_results) / len(opt_results),
+                    "avg_memory": sum(r.get("ram_usage_mb", 0) for r in opt_results) / len(opt_results)
+                }
+        
+        comprehensive_results["summary"] = {
+            "overall_metrics": metrics_summary,
+            "optimization_comparison": optimization_comparison
+        }
     
     # Save to JSON
     try:
@@ -377,7 +429,7 @@ def save_all_results(results, output_file=None):
         logger.error(f"Error saving results: {e}")
         return None
 
-def evaluate_all_models():
+def evaluate_all_models() -> tuple[list, str | None, str | None]:
     """Evaluate all target models without optimization"""
     
     # Get target models from local directory
@@ -440,7 +492,7 @@ def evaluate_all_models():
     
     return results, best_model, results_file
 
-def find_best_model(results):
+def find_best_model(results: list) -> str | None:
     """Find the best model based on weighted scoring"""
     if not results:
         return None
@@ -481,7 +533,7 @@ def find_best_model(results):
     logger.info(f"Best model selected: {best_model}")
     return best_model
 
-def update_config_with_best_model(best_model):
+def update_config_with_best_model(best_model: str | None) -> bool:
     if not best_model:
         logger.warning("No best model to update config with")
         return False
@@ -506,7 +558,7 @@ def update_config_with_best_model(best_model):
         logger.error(f"Error updating config.py: {e}")
         return False
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate LLM models for Smart Pub")
     parser.add_argument("--model-id", help="Specific model ID to evaluate")
     parser.add_argument("--list-models", action="store_true", help="List available local models")
@@ -581,10 +633,22 @@ def main():
     # Print detailed results for each model
     for i, model_metrics in enumerate(results, 1):
         model_id = model_metrics.get("model_id", "Unknown")
-        print(f"\n[{i}] Model: {model_id}")
-        print("-" * 60)
+        model_type = model_metrics.get("model_type", "unknown")
+        base_model = model_metrics.get("base_model", "Unknown")
+        
+        # Add optimization indicator
+        type_indicator = ""
+        if model_type == "original":
+            type_indicator = "🔵 Original"
+        elif model_type == "int8":
+            type_indicator = "🟡 INT8"
+        elif model_type == "int4":
+            type_indicator = "🟠 INT4"
+        
+        print(f"\n[{i}] {type_indicator} Model: {model_id}")
+        print("-" * 70)
         for k, v in model_metrics.items():
-            if k != "model_id" and isinstance(v, (int, float)):
+            if k not in ["model_id", "model_type", "base_model"] and isinstance(v, (int, float)):
                 print(f"  {k:<20}: {v:.4f}")
         
         # Add performance indicators
@@ -604,6 +668,32 @@ def main():
             print("  🟡 Medium Response")
         else:
             print("  🔴 Slow Response")
+    
+    # Optimization comparison summary
+    print(f"\n{'='*80}")
+    print("OPTIMIZATION COMPARISON")
+    print("="*80)
+    
+    optimization_stats = {}
+    for opt_type in ["original", "int8", "int4"]:
+        opt_results = [r for r in results if r.get("model_type") == opt_type]
+        if opt_results:
+            avg_latency = sum(r.get("latency", 0) for r in opt_results) / len(opt_results)
+            avg_accuracy = sum(r.get("accuracy", 0) for r in opt_results) / len(opt_results)
+            avg_memory = sum(r.get("ram_usage_mb", 0) for r in opt_results) / len(opt_results)
+            
+            optimization_stats[opt_type] = {
+                "count": len(opt_results),
+                "avg_latency": avg_latency,
+                "avg_accuracy": avg_accuracy,
+                "avg_memory": avg_memory
+            }
+            
+            type_name = {"original": "Original Models", "int8": "INT8 Optimized", "int4": "INT4 Optimized"}[opt_type]
+            print(f"\n{type_name} ({len(opt_results)} models):")
+            print(f"  Average Latency : {avg_latency:.4f}s")
+            print(f"  Average Accuracy: {avg_accuracy:.4f}")
+            print(f"  Average Memory  : {avg_memory:.2f} MB")
     
     # Summary statistics
     print(f"\n{'='*80}")

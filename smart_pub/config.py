@@ -7,6 +7,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 MODEL_DIR = PROJECT_ROOT / "models"
 VECTOR_DB_DIR = PROJECT_ROOT / "vector_db"
 RESULTS_DIR = PROJECT_ROOT / "results"
+TEST_CASES_FILE = DATA_DIR / "test_cases.json"
 
 # 디렉토리 생성
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -25,14 +26,31 @@ MODEL_CANDIDATES = [
 
 # 기본 모델 설정
 MODEL_ID = "EleutherAI/polyglot-ko-1.3b"
-MODEL_QUANTIZATION = "int8"  # 옵션: none, int8, int4, gptq
+MODEL_QUANTIZATION = "int8"
 MAX_NEW_TOKENS = 512
 TEMPERATURE = 0.7
 TOP_P = 0.9
 
 # RAG 설정
+# 임베딩 모델 설정 (한국어 특화)
 EMBEDDING_MODEL_ID = "jhgan/ko-sbert-nli"
+
+# 벡터 데이터베이스 타입
+# - "faiss": Facebook AI Similarity Search
+#   * GPU/CPU 모두 지원하는 고성능 벡터 검색 라이브러리
+#   * 대용량 벡터 데이터에 최적화
+#   * IndexFlatL2: L2 거리 기반 정확한 검색 (브루트포스)
+#   * IndexIVFFlat: 클러스터링 기반 근사 검색 (대용량 데이터용)
+#   * 장점: 빠른 검색 속도, 메모리 효율성, 확장성
+#   * 단점: 설정이 복잡할 수 있음
+# - "chroma": 오픈소스 임베딩 데이터베이스  
+#   * 사용하기 쉬운 API
+#   * 메타데이터 필터링 지원
+#   * 장점: 간단한 설정, 풍부한 기능
+#   * 단점: 대용량 데이터에서 faiss보다 느릴 수 있음
 VECTOR_DB_TYPE = "faiss"
+
+# 검색 시 반환할 상위 문서 수
 RETRIEVAL_TOP_K = 3
 
 # 감정 키워드 (20가지)
