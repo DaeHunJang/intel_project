@@ -145,17 +145,6 @@ models/
 model*.tar.gz
 model*.tar.gz.part_*
 
-# Data files
-smart_pub/data/
-data/
-datasets/
-*.csv
-*.json
-*.jsonl
-*.parquet
-*.feather
-*.pickle
-*.pkl
 
 # Vector databases
 smart_pub/vector_db/
@@ -171,10 +160,6 @@ results/
 outputs/
 logs/
 *.log
-evaluation_results_*.json
-evaluation_results_*.csv
-model_evaluation_*.json
-model_evaluation_*.csv
 
 # Temporary files
 temp/
