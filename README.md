@@ -46,7 +46,14 @@ pip install -r requirements.txt
 
 4. 모델 다운로드
 ```bash
+# 기본 모델 다운로드
 python download_operational_model.py
+
+# 임베딩 모델 다운로드
+python download_operational_model.py --embedding
+
+# 모든 후보 모델 다운로드
+python download_operational_model.py --all
 ```
 
 5. 데이터 처리 및 벡터 데이터베이스 구축
@@ -62,10 +69,10 @@ python build_vector_database.py
 python run_evaluator.py
 ```
 
-이 명령은 다음 모델들을 모두 평가하고 결과를 CSV로 저장합니다:
+이 명령은 다음 모델들을 모두 평가하고 결과를 저장합니다:
 - skt/ko-gpt-trinity-1.2B-v0.5
 - EleutherAI/polyglot-ko-1.3b
-- beomi/Llama-3-OpenKoEn-8B
+- beomi/Llama-3-Open-Ko-8B
 - naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B
 - naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-1.5B
 
@@ -78,31 +85,34 @@ python view_results.py
 ### 특정 모델만 평가
 
 ```bash
-python run_evaluator.py --model-id beomi/Llama-3-OpenKoEn-8B
+python run_evaluator.py --model-id beomi/Llama-3-Open-Ko-8B
 ```
 
-### 최적화 적용 후 평가
+### 모델 정확도 테스트
 
 ```bash
-python run_evaluator.py --optimize int8
-```
+# 모든 모델 정확도 테스트
+python accuracy_test_alon.py --all
 
-### 최적의 모델을 config에 자동 업데이트
+# 특정 모델 정확도 테스트
+python accuracy_test_alon.py --model-id polyglot-ko-1.3b
 
-```bash
-python run_evaluator.py --update-config
+# 자세한 결과 보기
+python accuracy_test_alon.py --model-id polyglot-ko-1.3b --show-details
 ```
 
 ## 모델 최적화
 
 ```bash
+# INT8 양자화
 python optimize_models.py --method int8
-```
 
-지원하는 최적화 방법:
-- `int8`: 8비트 정수 양자화
-- `int4`: 4비트 정수 양자화
-- `onnx`: ONNX 형식 변환
+# INT4 양자화
+python optimize_models.py --method int4
+
+# 특정 모델 최적화
+python optimize_models.py --model-path ./models/polyglot-ko-1.3b --method int8
+```
 
 ## 앱 실행
 
@@ -119,7 +129,7 @@ python main_recommender_app.py --debug
 python main_recommender_app.py --rebuild-vectordb
 
 # 특정 모델 사용
-python main_recommender_app.py --model-id beomi/Llama-3-OpenKoEn-8B
+python main_recommender_app.py --model-id beomi/Llama-3-Open-Ko-8B
 ```
 
 ## 대화 예시
@@ -142,46 +152,38 @@ AI 바텐더: 모히토 주문이 완료되었습니다! 곧 준비해서 가져
 
 ```
 smart_pub_project/
-├── build_vector_database.py
-├── download_operational_model.py
-├── main_recommender_app.py
-├── models/
-├── optimize_models.py
-├── README.md
-├── requirements.txt
-├── results/
-├── run_evaluator.py
-├── smart_pub/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── conversation/
-│   │   ├── __init__.py
+├── build_vector_database.py       # 벡터 DB 구축
+├── download_operational_model.py  # 모델 다운로드
+├── main_recommender_app.py        # 메인 애플리케이션
+├── optimize_models.py             # 모델 최적화
+├── run_evaluator.py               # 성능 평가
+├── view_results.py                # 결과 시각화
+├── requirements.txt               # 의존성 목록
+├── smart_pub/                     # 메인 패키지
+│   ├── config.py                  # 설정 파일
+│   ├── conversation/              # 대화 관리
 │   │   └── dialogue_manager.py
-│   ├── data/
-│   │   └── drinks.json
-│   ├── data_processing/
-│   │   ├── __init__.py
+│   ├── data/                      # 데이터 파일
+│   │   ├── drinks.json
+│   │   └── test_cases.json
+│   ├── data_processing/           # 데이터 처리
 │   │   └── drink_processor.py
-│   ├── emotion_engine/
-│   │   ├── __init__.py
+│   ├── emotion_engine/            # 감정 분석
 │   │   └── emotion_analyzer.py
-│   ├── model/
-│   │   ├── __init__.py
+│   ├── model/                     # 모델 관리
 │   │   ├── llm_wrapper.py
 │   │   ├── model_evaluator.py
 │   │   └── optimizer.py
-│   ├── rag_engine/
-│   │   ├── __init__.py
+│   ├── rag_engine/                # RAG 시스템
 │   │   ├── retriever.py
 │   │   └── vector_store.py
-│   ├── recommendation_engine/
-│   │   ├── __init__.py
+│   ├── recommendation_engine/     # 추천 엔진
 │   │   └── recommender.py
-│   └── utils/
-│       ├── __init__.py
+│   └── utils/                     # 유틸리티
 │       └── helpers.py
-├── vector_db/
-└── view_results.py
+├── models/                        # 다운로드된 모델들
+├── vector_db/                     # 벡터 데이터베이스
+└── results/                       # 평가 결과
 ```
 
 ## 모델 후보
@@ -190,7 +192,7 @@ smart_pub_project/
 
 1. **skt/ko-gpt-trinity-1.2B-v0.5**: 1.2B 파라미터의 한국어 특화 GPT 모델
 2. **EleutherAI/polyglot-ko-1.3b**: 1.3B 파라미터의 한국어 특화 모델
-3. **beomi/Llama-3-OpenKoEn-8B**: 8B 파라미터 크기의 Llama-3 기반 한국어-영어 이중 언어 모델
+3. **beomi/Llama-3-Open-Ko-8B**: 8B 파라미터 크기의 Llama-3 기반 한국어-영어 이중 언어 모델
 4. **naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B**: 네이버의 0.5B 경량 한국어 모델
 5. **naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-1.5B**: 네이버의 1.5B 한국어 모델
 
@@ -211,3 +213,70 @@ smart_pub_project/
 | INT8 양자화 | 8비트 정수 양자화 | 2-3x 빠른 추론 | ~75% 메모리 절감 |
 | INT4 양자화 | 4비트 정수 양자화 | 3-4x 빠른 추론 | ~87.5% 메모리 절감 |
 | ONNX 변환 | 크로스 플랫폼 추론 최적화 | 1.5-3x 빠른 추론 | 다양한 하드웨어 지원 |
+
+## 감정 분석 및 매핑
+
+프로젝트는 20가지 감정 키워드를 인식합니다:
+- 기분고조, 기분전환, 긴장완화, 깨끗함, 사교, 사색
+- 상쾌함, 세련됨, 스트레스해소, 신뢰감, 안정, 여유
+- 열정, 위로, 집중, 차분함, 특별한, 편안함, 행복, 활력
+
+각 감정은 술의 특성과 매핑되어 적절한 추천이 이루어집니다:
+- **기분전환**: Citrus, Refreshing, Herbal 특성의 술
+- **사교**: Popular, Easy to share, Festive 특성의 술
+- **위로**: Sweet, Creamy, Warm, Comforting 특성의 술
+
+## 성능 최적화
+
+### 모델 양자화 전략
+
+```python
+# INT8 양자화 (권장)
+BitsAndBytesConfig(
+    load_in_8bit=True,
+    llm_int8_threshold=6.0
+)
+
+# INT4 양자화 (메모리 중시)
+BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4"
+)
+```
+
+### 벡터 데이터베이스
+
+- **FAISS**: 고성능 벡터 유사도 검색
+- **한국어 임베딩**: jhgan/ko-sbert-nli 모델 사용
+- **검색 최적화**: L2 거리 기반 정확한 검색
+
+## 트러블슈팅
+
+### 모델 로드 실패
+```bash
+# 모델 다시 다운로드
+python download_operational_model.py --model-id MODEL_NAME
+
+# 로컬 모델 확인
+python download_operational_model.py --list-models
+```
+
+### 벡터 데이터베이스 오류
+```bash
+# 벡터 DB 재구축
+python build_vector_database.py
+
+# 임베딩 모델 다운로드
+python download_operational_model.py --embedding
+```
+
+### 메모리 부족
+```bash
+# 더 작은 모델 사용
+python main_recommender_app.py --model-id HyperCLOVAX-SEED-Text-Instruct-0.5B
+
+# 양자화 적용
+python optimize_models.py --method int8
+```
