@@ -25,8 +25,8 @@ MODEL_CANDIDATES = [
 ]
 
 # 기본 모델 설정
-MODEL_ID = "EleutherAI/polyglot-ko-1.3b"
-MODEL_QUANTIZATION = "int8"
+MODEL_ID = "HyperCLOVAX-SEED-Text-Instruct-1.5B-int4"
+MODEL_QUANTIZATION = "int4"
 MAX_NEW_TOKENS = 512
 TEMPERATURE = 0.7
 TOP_P = 0.9

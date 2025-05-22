@@ -1,611 +1,311 @@
 {
   "test_info": {
     "description": "Smart Pub 감정 분석 및 추천 정확도 테스트 케이스",
-    "total_cases": 100,
-    "emotions_covered": ["기분전환", "사교", "스트레스해소", "행복", "사색", "위로", "활력", "긴장완화", "차분함", "특별한"],
-    "created_date": "2024-01-01",
-    "version": "2.0"
+    "total_cases": 50,
+    "emotions_covered": ["기분전환", "사교", "스트레스해소", "행복", "사색", "위로", "활력", "긴장완화", "차분함", "특별한", "편안함", "상쾌함"],
+    "created_date": "2025-05-22",
+    "version": "3.0"
   },
   "test_cases": [
     {
       "id": 1,
-      "category": "행복",
-      "prompt": "좋은 소식을 들었어",
-      "expected_keywords": ["행복"]
+      "category": "기분전환",
+      "prompt": "오늘 기분이 너무 우울해. 뭐 마시면 좋을까?",
+      "expected_keywords": ["기분전환", "위로", "달콤", "따뜻"]
     },
     {
       "id": 2,
-      "category": "기분전환",
-      "prompt": "뭔가 지루해서 새로운 걸 시도하고 싶어",
-      "expected_keywords": ["기분전환"]
+      "category": "사교",
+      "prompt": "친구들과 파티할 거라서 신나는 분위기가 필요해!",
+      "expected_keywords": ["사교", "활력", "파티", "즐거운"]
     },
     {
       "id": 3,
-      "category": "기분전환",
-      "prompt": "계속 같은 일상의 반복이라 심심해",
-      "expected_keywords": ["기분전환"]
+      "category": "스트레스해소",
+      "prompt": "일이 너무 많아서 스트레스 받아. 도움되는 음료 추천해줘.",
+      "expected_keywords": ["스트레스해소", "긴장완화", "편안", "진정"]
     },
     {
       "id": 4,
-      "category": "기분전환",
-      "prompt": "기분이 다운되어서 바꾸고 싶어",
-      "expected_keywords": ["기분전환"]
+      "category": "특별한",
+      "prompt": "오늘 승진했어! 축하할만한 특별한 음료 없을까?",
+      "expected_keywords": ["특별한", "행복", "축하", "기념"]
     },
     {
       "id": 5,
-      "category": "기분전환",
-      "prompt": "우울한 날씨 때문에 기분이 안좋아",
-      "expected_keywords": ["기분전환", "위로"]
+      "category": "사색",
+      "prompt": "조용히 사색하고 싶은 밤이야. 어울리는 술 추천해줘.",
+      "expected_keywords": ["사색", "차분함", "여유", "조용"]
     },
     {
       "id": 6,
-      "category": "기분전환",
-      "prompt": "힘든 하루였어, 뭔가 달콤한게 필요해",
-      "expected_keywords": ["기분전환", "위로"]
+      "category": "상쾌함",
+      "prompt": "더운 여름날이라 시원한 음료가 마시고 싶어.",
+      "expected_keywords": ["상쾌함", "시원", "여름", "청량"]
     },
     {
       "id": 7,
-      "category": "기분전환",
-      "prompt": "실연당해서 기분을 전환하고 싶어",
-      "expected_keywords": ["기분전환", "위로"]
+      "category": "편안함",
+      "prompt": "혼자 집에서 영화 보면서 마실 거 추천해줘.",
+      "expected_keywords": ["편안함", "혼자", "집", "여유"]
     },
     {
       "id": 8,
-      "category": "기분전환",
-      "prompt": "월요병이 심해서 기운을 내고 싶어",
-      "expected_keywords": ["기분전환", "활력"]
+      "category": "사교",
+      "prompt": "데이트할 때 마시기 좋은 술 있을까?",
+      "expected_keywords": ["사교", "로맨틱", "특별한", "데이트"]
     },
     {
       "id": 9,
-      "category": "기분전환",
-      "prompt": "시험 떨어져서 기분이 안좋아",
-      "expected_keywords": ["기분전환", "위로"]
+      "category": "활력",
+      "prompt": "운동 후에 마시고 싶어.",
+      "expected_keywords": ["활력", "상쾌함", "운동", "회복"]
     },
     {
       "id": 10,
-      "category": "기분전환",
-      "prompt": "무기력해서 에너지가 필요해",
-      "expected_keywords": ["기분전환", "활력"]
+      "category": "차분함",
+      "prompt": "잠자리에 들기 전에 마음을 편안하게 하고 싶어.",
+      "expected_keywords": ["차분함", "편안함", "수면", "진정"]
     },
     {
       "id": 11,
-      "category": "사교",
-      "prompt": "친구들과 파티할 거라서 신나는 분위기가 필요해!",
-      "expected_keywords": ["사교", "활력"]
+      "category": "기분전환",
+      "prompt": "월요병이 심해서 기운을 내고 싶어.",
+      "expected_keywords": ["기분전환", "활력", "월요병", "기운"]
     },
     {
       "id": 12,
-      "category": "사교",
-      "prompt": "동료들과 회식이 있어",
-      "expected_keywords": ["사교"]
+      "category": "위로",
+      "prompt": "실연당해서 마음이 아파.",
+      "expected_keywords": ["위로", "기분전환", "달콤", "치유"]
     },
     {
       "id": 13,
-      "category": "사교",
-      "prompt": "새로운 사람들과 만날 거야",
-      "expected_keywords": ["사교"]
+      "category": "긴장완화",
+      "prompt": "면접 보기 전이라 긴장돼.",
+      "expected_keywords": ["긴장완화", "진정", "편안", "안정"]
     },
     {
       "id": 14,
-      "category": "사교",
-      "prompt": "데이트할 때 마실 거 추천해줘",
-      "expected_keywords": ["사교", "특별한"]
+      "category": "행복",
+      "prompt": "시험에 합격했어!",
+      "expected_keywords": ["행복", "특별한", "축하", "기쁨"]
     },
     {
       "id": 15,
       "category": "사교",
-      "prompt": "생일파티에서 건배할 거야",
-      "expected_keywords": ["사교", "행복"]
+      "prompt": "동료들과 회식이 있어.",
+      "expected_keywords": ["사교", "회식", "친목", "화합"]
     },
     {
       "id": 16,
-      "category": "사교",
-      "prompt": "동창회에 갈 예정이야",
-      "expected_keywords": ["사교"]
+      "category": "스트레스해소",
+      "prompt": "취업 준비가 너무 힘들어.",
+      "expected_keywords": ["스트레스해소", "위로", "힘든", "지원"]
     },
     {
       "id": 17,
-      "category": "사교",
-      "prompt": "팀 회식에서 분위기를 띄우고 싶어",
-      "expected_keywords": ["사교", "활력"]
+      "category": "특별한",
+      "prompt": "기념일이라서 특별한 음료를 마시고 싶어.",
+      "expected_keywords": ["특별한", "기념일", "축하", "소중한"]
     },
     {
       "id": 18,
-      "category": "사교",
-      "prompt": "소개팅이 있어서 긴장돼",
-      "expected_keywords": ["사교", "긴장완화"]
+      "category": "상쾌함",
+      "prompt": "아침 조깅 후라서 시원한 게 마시고 싶어.",
+      "expected_keywords": ["상쾌함", "시원", "조깅", "활력"]
     },
     {
       "id": 19,
-      "category": "사교",
-      "prompt": "친구들과 즐거운 시간을 보내고 싶어",
-      "expected_keywords": ["사교", "행복"]
+      "category": "편안함",
+      "prompt": "따뜻한 방에서 혼자만의 시간을 보내고 싶어.",
+      "expected_keywords": ["편안함", "따뜻", "혼자", "여유"]
     },
     {
       "id": 20,
-      "category": "행복",
-      "prompt": "시험에 합격했어",
-      "expected_keywords": ["행복", "특별한"]
+      "category": "사색",
+      "prompt": "책을 읽으면서 여유를 즐기고 싶어.",
+      "expected_keywords": ["사색", "여유", "책", "조용"]
     },
     {
       "id": 21,
-      "category": "사색",
-      "prompt": "조용히 사색하고 싶은 밤이야. 어울리는 술 추천해줘.",
-      "expected_keywords": ["사색", "차분함", "여유"]
+      "category": "활력",
+      "prompt": "무기력해서 에너지가 필요해.",
+      "expected_keywords": ["활력", "에너지", "기운", "활기"]
     },
     {
       "id": 22,
-      "category": "사색",
-      "prompt": "책을 읽으면서 여유를 즐기고 싶어",
-      "expected_keywords": ["사색", "여유"]
+      "category": "긴장완화",
+      "prompt": "발표 때문에 떨려서 진정하고 싶어.",
+      "expected_keywords": ["긴장완화", "진정", "떨림", "안정"]
     },
     {
       "id": 23,
-      "category": "사색",
-      "prompt": "인생에 대해 깊이 생각해보고 싶어",
-      "expected_keywords": ["사색"]
+      "category": "위로",
+      "prompt": "가족과 싸워서 기분이 안좋아.",
+      "expected_keywords": ["위로", "기분전환", "갈등", "치유"]
     },
     {
       "id": 24,
-      "category": "사색",
-      "prompt": "철학적인 대화를 나누고 싶어",
-      "expected_keywords": ["사색"]
+      "category": "행복",
+      "prompt": "좋은 소식을 들었어.",
+      "expected_keywords": ["행복", "기쁨", "좋은", "소식"]
     },
     {
       "id": 25,
-      "category": "사색",
-      "prompt": "예술 작품을 감상하면서 영감을 얻고 싶어",
-      "expected_keywords": ["사색", "여유"]
+      "category": "차분함",
+      "prompt": "요가 후에 마음이 평온해져서.",
+      "expected_keywords": ["차분함", "평온", "요가", "안정"]
     },
     {
       "id": 26,
-      "category": "위로",
-      "prompt": "힘든 하루였어, 뭔가 달콤한게 필요해",
-      "expected_keywords": ["위로", "기분전환"]
+      "category": "사교",
+      "prompt": "소개팅이 있어서 긴장돼.",
+      "expected_keywords": ["사교", "긴장완화", "소개팅", "만남"]
     },
     {
       "id": 27,
-      "category": "위로",
-      "prompt": "실연당해서 마음이 아파",
-      "expected_keywords": ["위로", "기분전환"]
+      "category": "특별한",
+      "prompt": "첫 월급날이라서 축하하고 싶어.",
+      "expected_keywords": ["특별한", "축하", "첫", "월급"]
     },
     {
       "id": 28,
-      "category": "위로",
-      "prompt": "가족 문제로 고민이 많아",
-      "expected_keywords": ["위로", "스트레스해소"]
+      "category": "상쾌함",
+      "prompt": "샤워 후에 깔끔한 느낌이야.",
+      "expected_keywords": ["상쾌함", "깔끔", "샤워", "깨끗"]
     },
     {
       "id": 29,
-      "category": "위로",
-      "prompt": "취업 준비가 너무 힘들어",
-      "expected_keywords": ["위로", "스트레스해소"]
+      "category": "편안함",
+      "prompt": "소파에 누워서 영화를 보고 싶어.",
+      "expected_keywords": ["편안함", "소파", "영화", "휴식"]
     },
     {
       "id": 30,
-      "category": "위로",
-      "prompt": "외로워서 혼자 마시고 싶어",
-      "expected_keywords": ["위로", "차분함"]
+      "category": "스트레스해소",
+      "prompt": "회사에서 힘든 일이 있었어.",
+      "expected_keywords": ["스트레스해소", "위로", "회사", "힘든"]
     },
     {
       "id": 31,
-      "category": "활력",
-      "prompt": "월요병이 심해서 기운을 내고 싶어",
-      "expected_keywords": ["활력", "기분전환"]
+      "category": "기분전환",
+      "prompt": "뭔가 지루해서 새로운 걸 시도하고 싶어.",
+      "expected_keywords": ["기분전환", "새로운", "지루", "변화"]
     },
     {
       "id": 32,
-      "category": "활력",
-      "prompt": "무기력해서 에너지가 필요해",
-      "expected_keywords": ["활력", "기분전환"]
+      "category": "사색",
+      "prompt": "인생에 대해 깊이 생각해보고 싶어.",
+      "expected_keywords": ["사색", "인생", "깊이", "생각"]
     },
     {
       "id": 33,
       "category": "활력",
-      "prompt": "운동 후에 상쾌한 음료가 마시고 싶어",
-      "expected_keywords": ["활력", "상쾌함"]
+      "prompt": "새로운 프로젝트 시작하는 기념으로.",
+      "expected_keywords": ["활력", "새로운", "프로젝트", "시작"]
     },
     {
       "id": 34,
-      "category": "활력",
-      "prompt": "새로운 프로젝트 시작하는 기념으로",
-      "expected_keywords": ["활력", "특별한"]
+      "category": "긴장완화",
+      "prompt": "중요한 회의 전이라 마음을 가라앉히고 싶어.",
+      "expected_keywords": ["긴장완화", "회의", "가라앉히", "마음"]
     },
     {
       "id": 35,
-      "category": "활력",
-      "prompt": "아침부터 기분이 좋아서 시원한 걸 마시고 싶어",
-      "expected_keywords": ["활력", "행복"]
+      "category": "위로",
+      "prompt": "외로워서 혼자 마시고 싶어.",
+      "expected_keywords": ["위로", "외로움", "혼자", "위안"]
     },
     {
       "id": 36,
-      "category": "긴장완화",
-      "prompt": "면접 보기 전이라 긴장돼",
-      "expected_keywords": ["긴장완화"]
+      "category": "행복",
+      "prompt": "아기가 첫걸음을 뗐어.",
+      "expected_keywords": ["행복", "첫걸음", "아기", "기쁨"]
     },
     {
       "id": 37,
-      "category": "긴장완화",
-      "prompt": "발표 때문에 떨려서 진정하고 싶어",
-      "expected_keywords": ["긴장완화", "차분함"]
+      "category": "차분함",
+      "prompt": "비 오는 날 창가에서 혼자 있고 싶어.",
+      "expected_keywords": ["차분함", "비", "창가", "혼자"]
     },
     {
       "id": 38,
-      "category": "긴장완화",
-      "prompt": "소개팅이 있어서 긴장돼",
-      "expected_keywords": ["긴장완화", "사교"]
+      "category": "사교",
+      "prompt": "친구들과 즐거운 시간을 보내고 싶어.",
+      "expected_keywords": ["사교", "친구", "즐거운", "시간"]
     },
     {
       "id": 39,
-      "category": "긴장완화",
-      "prompt": "중요한 회의 전이라 마음을 가라앉히고 싶어",
-      "expected_keywords": ["긴장완화", "차분함"]
+      "category": "특별한",
+      "prompt": "프로포즈를 받았어!",
+      "expected_keywords": ["특별한", "프로포즈", "축하", "기념"]
     },
     {
       "id": 40,
-      "category": "긴장완화",
-      "prompt": "첫 데이트라서 너무 떨려",
-      "expected_keywords": ["긴장완화", "사교"]
+      "category": "상쾌함",
+      "prompt": "바람이 시원한 해변에서 마시고 싶어.",
+      "expected_keywords": ["상쾌함", "바람", "해변", "시원"]
     },
     {
       "id": 41,
-      "category": "차분함",
-      "prompt": "자연 속에서 명상하고 싶어",
-      "expected_keywords": ["차분함", "사색"]
+      "category": "편안함",
+      "prompt": "휴가 마지막 날이라서 편안하게 보내고 싶어.",
+      "expected_keywords": ["편안함", "휴가", "마지막", "여유"]
     },
     {
       "id": 42,
-      "category": "차분함",
-      "prompt": "혼자만의 시간이 필요해",
-      "expected_keywords": ["차분함", "사색"]
+      "category": "스트레스해소",
+      "prompt": "시험 전날이라 불안해.",
+      "expected_keywords": ["스트레스해소", "긴장완화", "시험", "불안"]
     },
     {
       "id": 43,
-      "category": "차분함",
-      "prompt": "잠자리에 들기 전에 마음을 편안하게 하고 싶어",
-      "expected_keywords": ["차분함", "편안함"]
+      "category": "기분전환",
+      "prompt": "우울한 날씨 때문에 기분이 안좋아.",
+      "expected_keywords": ["기분전환", "우울", "날씨", "기분"]
     },
     {
       "id": 44,
-      "category": "차분함",
-      "prompt": "요가 후에 마음이 평온해져서",
-      "expected_keywords": ["차분함", "편안함"]
+      "category": "사색",
+      "prompt": "마음을 정리하고 싶은 저녁이야.",
+      "expected_keywords": ["사색", "마음", "정리", "저녁"]
     },
     {
       "id": 45,
-      "category": "차분함",
-      "prompt": "조용한 카페에서 여유롭게 시간 보내고 싶어",
-      "expected_keywords": ["차분함", "여유"]
+      "category": "활력",
+      "prompt": "에너지가 필요한 밤이야.",
+      "expected_keywords": ["활력", "에너지", "밤", "기운"]
     },
     {
       "id": 46,
-      "category": "특별한",
-      "prompt": "기념일이라서 특별한 음료를 마시고 싶어",
-      "expected_keywords": ["특별한"]
+      "category": "긴장완화",
+      "prompt": "첫 데이트라서 너무 떨려.",
+      "expected_keywords": ["긴장완화", "데이트", "떨림", "진정"]
     },
     {
       "id": 47,
-      "category": "특별한",
-      "prompt": "새 차를 샀어",
-      "expected_keywords": ["특별한", "행복"]
+      "category": "위로",
+      "prompt": "힘든 하루였어, 뭔가 달콤한게 필요해.",
+      "expected_keywords": ["위로", "힘든", "달콤", "하루"]
     },
     {
       "id": 48,
-      "category": "특별한",
-      "prompt": "아이가 첫걸음을 뗐어",
-      "expected_keywords": ["특별한", "행복"]
+      "category": "행복",
+      "prompt": "새 차를 샀어.",
+      "expected_keywords": ["행복", "새차", "구매", "기쁨"]
     },
     {
       "id": 49,
-      "category": "특별한",
-      "prompt": "좋아하는 가수 콘서트 티켓을 구했어",
-      "expected_keywords": ["특별한", "행복"]
+      "category": "차분함",
+      "prompt": "자연 속에서 명상하고 싶어.",
+      "expected_keywords": ["차분함", "자연", "명상", "평온"]
     },
     {
       "id": 50,
       "category": "특별한",
-      "prompt": "오늘은 특별한 날이니까 고급 음료를 마시고 싶어",
-      "expected_keywords": ["특별한"]
-    },
-    {
-      "id": 51,
-      "category": "위로",
-      "prompt": "실연당해서 마음이 아파",
-      "expected_keywords": ["위로", "기분전환"]
-    },
-    {
-      "id": 52,
-      "category": "위로",
-      "prompt": "외로워서 혼자 마시고 싶어",
-      "expected_keywords": ["위로", "차분함"]
-    },
-    {
-      "id": 53,
-      "category": "위로",
-      "prompt": "가족과 싸워서 기분이 안좋아",
-      "expected_keywords": ["위로", "스트레스해소"]
-    },
-    {
-      "id": 54,
-      "category": "위로",
-      "prompt": "회사에서 힘든 일이 있었어",
-      "expected_keywords": ["위로", "스트레스해소"]
-    },
-    {
-      "id": 55,
-      "category": "위로",
-      "prompt": "펜션에서 혼자 쉬고 있어",
-      "expected_keywords": ["위로", "여유"]
-    },
-    {
-      "id": 56,
-      "category": "활력",
-      "prompt": "새로운 프로젝트 시작하는 기념으로",
-      "expected_keywords": ["활력", "특별한"]
-    },
-    {
-      "id": 57,
-      "category": "활력",
-      "prompt": "아침부터 기분이 좋아서 시원한 걸 마시고 싶어",
-      "expected_keywords": ["활력", "행복"]
-    },
-    {
-      "id": 58,
-      "category": "활력",
-      "prompt": "운동 후에 상쾌한 음료가 마시고 싶어",
-      "expected_keywords": ["활력", "상쾌함"]
-    },
-    {
-      "id": 59,
-      "category": "활력",
-      "prompt": "새벽에 일어나서 하루를 시작하고 싶어",
-      "expected_keywords": ["활력"]
-    },
-    {
-      "id": 60,
-      "category": "활력",
-      "prompt": "에너지가 필요한 밤이야",
-      "expected_keywords": ["활력", "기분전환"]
-    },
-    {
-      "id": 61,
-      "category": "긴장완화",
-      "prompt": "면접 보기 전이라 긴장돼",
-      "expected_keywords": ["긴장완화"]
-    },
-    {
-      "id": 62,
-      "category": "긴장완화",
-      "prompt": "발표 때문에 떨려서 진정하고 싶어",
-      "expected_keywords": ["긴장완화", "차분함"]
-    },
-    {
-      "id": 63,
-      "category": "긴장완화",
-      "prompt": "중요한 회의 전이라 마음을 가라앉히고 싶어",
-      "expected_keywords": ["긴장완화", "차분함"]
-    },
-    {
-      "id": 64,
-      "category": "긴장완화",
-      "prompt": "첫 데이트라서 너무 떨려",
-      "expected_keywords": ["긴장완화", "사교"]
-    },
-    {
-      "id": 65,
-      "category": "긴장완화",
-      "prompt": "시험 전날이라 불안해",
-      "expected_keywords": ["긴장완화", "스트레스해소"]
-    },
-    {
-      "id": 66,
-      "category": "차분함",
-      "prompt": "잠자리에 들기 전에 마음을 편안하게 하고 싶어",
-      "expected_keywords": ["차분함", "편안함"]
-    },
-    {
-      "id": 67,
-      "category": "차분함",
-      "prompt": "요가 후에 마음이 평온해져서",
-      "expected_keywords": ["차분함", "편안함"]
-    },
-    {
-      "id": 68,
-      "category": "차분함",
-      "prompt": "조용한 카페에서 여유롭게 시간 보내고 싶어",
-      "expected_keywords": ["차분함", "여유"]
-    },
-    {
-      "id": 69,
-      "category": "차분함",
-      "prompt": "비 오는 날 창가에서 혼자 있고 싶어",
-      "expected_keywords": ["차분함", "사색"]
-    },
-    {
-      "id": 70,
-      "category": "차분함",
-      "prompt": "마음을 정리하고 싶은 저녁이야",
-      "expected_keywords": ["차분함", "사색"]
-    },
-    {
-      "id": 71,
-      "category": "특별한",
-      "prompt": "기념일이라서 특별한 음료를 마시고 싶어",
-      "expected_keywords": ["특별한"]
-    },
-    {
-      "id": 72,
-      "category": "특별한",
-      "prompt": "오늘은 특별한 날이니까 고급 음료를 마시고 싶어",
-      "expected_keywords": ["특별한"]
-    },
-    {
-      "id": 73,
-      "category": "특별한",
-      "prompt": "첫 월급날이라서 축하하고 싶어",
-      "expected_keywords": ["특별한", "행복"]
-    },
-    {
-      "id": 74,
-      "category": "특별한",
-      "prompt": "프로포즈를 받았어!",
-      "expected_keywords": ["특별한", "행복"]
-    },
-    {
-      "id": 75,
-      "category": "특별한",
-      "prompt": "창업 1주년 기념이야",
-      "expected_keywords": ["특별한", "행복"]
-    },
-    {
-      "id": 76,
-      "category": "편안함",
-      "prompt": "집에서 편안하게 쉬고 싶어",
-      "expected_keywords": ["편안함", "차분함"]
-    },
-    {
-      "id": 77,
-      "category": "편안함",
-      "prompt": "따뜻한 방에서 혼자만의 시간을 보내고 싶어",
-      "expected_keywords": ["편안함", "여유"]
-    },
-    {
-      "id": 78,
-      "category": "편안함",
-      "prompt": "소파에 누워서 영화를 보고 싶어",
-      "expected_keywords": ["편안함", "여유"]
-    },
-    {
-      "id": 79,
-      "category": "편안함",
-      "prompt": "친구 집에서 편하게 놀고 있어",
-      "expected_keywords": ["편안함", "사교"]
-    },
-    {
-      "id": 80,
-      "category": "편안함",
-      "prompt": "휴가 마지막 날이라서 편안하게 보내고 싶어",
-      "expected_keywords": ["편안함", "여유"]
-    },
-    {
-      "id": 81,
-      "category": "여유",
-      "prompt": "주말 오후를 느긋하게 보내고 싶어",
-      "expected_keywords": ["여유", "편안함"]
-    },
-    {
-      "id": 82,
-      "category": "여유",
-      "prompt": "시간이 천천히 흘러가는 느낌을 만끽하고 싶어",
-      "expected_keywords": ["여유", "사색"]
-    },
-    {
-      "id": 83,
-      "category": "여유",
-      "prompt": "바쁜 일상에서 벗어나 잠시 쉬고 싶어",
-      "expected_keywords": ["여유", "편안함"]
-    },
-    {
-      "id": 84,
-      "category": "여유",
-      "prompt": "산책하면서 느긋한 시간을 보내고 있어",
-      "expected_keywords": ["여유", "편안함"]
-    },
-    {
-      "id": 85,
-      "category": "여유",
-      "prompt": "온천에서 힐링하고 있어",
-      "expected_keywords": ["여유", "편안함"]
-    },
-    {
-      "id": 86,
-      "category": "상쾌함",
-      "prompt": "아침 조깅 후라서 시원한 게 마시고 싶어",
-      "expected_keywords": ["상쾌함", "활력"]
-    },
-    {
-      "id": 87,
-      "category": "상쾌함",
-      "prompt": "샤워 후에 깔끔한 느낌이야",
-      "expected_keywords": ["상쾌함", "깨끗함"]
-    },
-    {
-      "id": 88,
-      "category": "상쾌함",
-      "prompt": "바람이 시원한 해변에서 마시고 싶어",
-      "expected_keywords": ["상쾌함", "여유"]
-    },
-    {
-      "id": 89,
-      "category": "상쾌함",
-      "prompt": "더운 여름날 에어컨 아래서 시원한 걸 마시고 싶어",
-      "expected_keywords": ["상쾌함"]
-    },
-    {
-      "id": 90,
-      "category": "상쾌함",
-      "prompt": "민트향이 나는 시원한 음료가 마시고 싶어",
-      "expected_keywords": ["상쾌함"]
-    },
-    {
-      "id": 91,
-      "category": "깨끗함",
-      "prompt": "맑은 공기를 마시며 깨끗한 음료를 마시고 싶어",
-      "expected_keywords": ["깨끗함", "상쾌함"]
-    },
-    {
-      "id": 92,
-      "category": "깨끗함",
-      "prompt": "투명하고 깔끔한 맛의 음료가 좋겠어",
-      "expected_keywords": ["깨끗함"]
-    },
-    {
-      "id": 93,
-      "category": "깨끗함",
-      "prompt": "순수한 맛을 느끼고 싶어",
-      "expected_keywords": ["깨끗함"]
-    },
-    {
-      "id": 94,
-      "category": "깨끗함",
-      "prompt": "심플하고 군더더기 없는 음료를 마시고 싶어",
-      "expected_keywords": ["깨끗함"]
-    },
-    {
-      "id": 95,
-      "category": "깨끗함",
-      "prompt": "물처럼 깔끔한 느낌의 음료가 좋겠어",
-      "expected_keywords": ["깨끗함"]
-    },
-    {
-      "id": 96,
-      "category": "집중",
-      "prompt": "중요한 일에 집중하기 전이야",
-      "expected_keywords": ["집중"]
-    },
-    {
-      "id": 97,
-      "category": "집중",
-      "prompt": "공부할 때 마실 음료가 필요해",
-      "expected_keywords": ["집중"]
-    },
-    {
-      "id": 98,
-      "category": "집중",
-      "prompt": "업무에 몰입하고 싶어",
-      "expected_keywords": ["집중"]
-    },
-    {
-      "id": 99,
-      "category": "집중",
-      "prompt": "정신을 바짝 차리고 싶어",
-      "expected_keywords": ["집중", "활력"]
-    },
-    {
-      "id": 100,
-      "category": "집중",
-      "prompt": "머리가 맑아지는 음료를 마시고 싶어",
-      "expected_keywords": ["집중", "상쾌함"]
+      "prompt": "창업 1주년 기념이야.",
+      "expected_keywords": ["특별한", "창업", "기념", "1주년"]
     }
   ]
 }
