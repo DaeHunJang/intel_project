@@ -2,6 +2,7 @@ import os
 import argparse
 import sys
 from pathlib import Path
+import logging
 
 # Add project root to Python path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -175,37 +176,44 @@ def run_cli_interface(dialogue_manager):
     print("감정을 표현하거나 원하는 것을 말씀해주세요.")
     print("종료하려면 'exit' 또는 'quit'를 입력하세요.")
     print("="*50 + "\n")
-    
+
+    # 초기 인사 메시지
+    initial_greeting = "안녕하세요! 오늘 기분은 어떠신가요? 기분에 딱 맞는 술을 추천해드릴게요."
+    print(f"AI 바텐더: {initial_greeting}")
+    dialogue_manager.add_message("assistant", initial_greeting)
+
     while True:
         try:
-            user_input = input("사용자: ")
-            
+            user_input = ""
+            # 입력이 들어올 때까지 무한 반복
+            while not user_input:
+                user_input = input("사용자: ").strip()
+                if not user_input:
+                    print("메시지를 입력해주세요.")
+
             if user_input.lower() in ["exit", "quit", "종료", "나가기"]:
                 print("\n감사합니다. 안녕히 가세요!")
                 break
-            
-            if not user_input.strip():
-                print("메시지를 입력해주세요.")
-                continue
-            
+
             response = dialogue_manager.generate_response(user_input)
             print(f"AI 바텐더: {response}\n")
-            
+
         except KeyboardInterrupt:
             print("\n프로그램을 종료합니다.")
             break
-        
         except Exception as e:
             logger.error(f"Error processing input: {e}")
             print("죄송합니다, 오류가 발생했습니다. 다시 시도해주세요.")
+            dialogue_manager.clear_history()
 
 def main():
+    import logging
+    logging.getLogger().setLevel(logging.WARNING)  # info 이하 로그 숨김
     print("Smart Pub 앱을 시작합니다...")
     
     args = setup_argparse()
     
     if args.debug:
-        import logging
         logging.getLogger().setLevel(logging.DEBUG)
         print("디버그 모드 활성화")
     
